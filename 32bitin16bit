@@ -1,0 +1,33 @@
+DATA SEGMENT
+DIVISOR   DW    10H ; 
+DIVIDEND DW  3456H,2335H; 
+QUOTIENT   DW 2 DUP (0)
+REMAINDER  DW 0
+TEMP    DW ? 
+DATA  ENDS 
+CODE SEGMENT
+ASSUME CS : CODE , DS:DATA 
+START : MOV AX,DATA ; 
+        MOV DS,AX; 
+        CMP DIVISOR ,0 ; 
+        JZ  ERROR; 
+        MOV AX,DIVIDEND; 
+        MOV DX,DIVIDEND +2;
+        MOV CX,DIVISOR ;
+        MOV BX,AX ; 
+        MOV AX,DX; 
+        MOV DX,0000H 
+        DIV CX;
+        MOV TEMP,AX;
+        MOV AX,BX;
+        DIV CX ;
+        MOV CX,DX; 
+        MOV DX,TEMP; 
+        CLC ; 
+        JMP LAST 
+ERROR: STC ; 
+LAST: MOV AH,4CH ;
+       INT 21H ; 
+       CODE ENDS
+       END START 
+       
